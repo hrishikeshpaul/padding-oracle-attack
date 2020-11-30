@@ -1,6 +1,6 @@
 # CBC Padding Oracle Attack
 
-his paper demonstrates a real world vulnerability in the AES-Cipher 
+This is an implementation of a real world vulnerability in the AES-Cipher 
 Block Chaining method of encryption and decryption known as Padding 
 Oracle Attack. By analyzing the boolean output from the server - 
 whether or not a message has the correct padding, we were able to 
