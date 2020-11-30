@@ -65,6 +65,6 @@ def encrypt_helper(PREV_BLOCK) -> list:
         i -= 1
         padding += 1
 
-        return INT_BLOCK
+    return INT_BLOCK
 
 

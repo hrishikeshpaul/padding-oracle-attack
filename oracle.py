@@ -3,9 +3,6 @@
 import socket
 import sys
 
-import decrypt
-import encrypt
-
 BLOCK_SIZE = 16
 HEX_VALUES = 256
 
@@ -88,19 +85,22 @@ def addPadding():
 
 if __name__ == "__main__":
 
+    import decrypt
+    import encrypt
+
     while 1:
         print('1. Decryption')
         print('2. Encryption')
         print('0. Exit')
         op = input()
 
-        if op == 1:
+        if int(op) == 1:
             decrypt.decrypt()
-        elif op == 2:
+        elif int(op) == 2:
             encryptedData = encrypt.encrypt()
             print(f'Encrypted Data: {encryptedData}')
             print(f'Correct? {checkPadding(encryptedData, 2)}')
-        elif op == 0:
+        elif int(op) == 0:
             print('Thank you!')
             sys.exit(0)
         else:
