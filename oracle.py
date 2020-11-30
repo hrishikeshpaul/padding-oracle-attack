@@ -6,6 +6,9 @@ import sys
 import decrypt
 import encrypt
 
+BLOCK_SIZE = 16
+HEX_VALUES = 256
+
 CT = bytes.fromhex("e6 b1 48 42 41 1b 31 fb fe 02 e3 32 b5 14 61 81")
 CT += bytes.fromhex("f0 d0 7c 0f a5 0f 26 f4 c4 6c 57 a0 c5 6c bb 3b")
 CT += bytes.fromhex("f9 e6 a6 0d ee 42 82 96 f0 70 7a fc 2e fc 08 d5")

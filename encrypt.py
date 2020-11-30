@@ -1,6 +1,6 @@
 import math
 
-from oracle import addPadding, convBytes, checkPadding
+from oracle import addPadding, convBytes, checkPadding, BLOCK_SIZE, HEX_VALUES
 
 
 def encrypt() -> bytes:
@@ -10,9 +10,9 @@ def encrypt() -> bytes:
     """
 
     PT = addPadding()  # plain text with padding
-    n = math.ceil(len(PT) / 16)  # number of blocks
+    n = math.ceil(len(PT) / BLOCK_SIZE)  # number of blocks
 
-    PREV_BLOCK = b''.join([convBytes(c) for c in range(16)])  # initializing previous block with random values
+    PREV_BLOCK = b''.join([convBytes(c) for c in range(BLOCK_SIZE)])  # initializing previous block with random values
     CT_LIST = [PREV_BLOCK]  # final cipher-text list
 
     while n > 0:
@@ -20,9 +20,9 @@ def encrypt() -> bytes:
 
         PREV_BLOCK = b''
 
-        currentPTBlock = PT[(n - 1) * 16:(n - 1) * 16 + 16]
+        currentPTBlock = PT[(n - 1) * BLOCK_SIZE:(n - 1) * BLOCK_SIZE + BLOCK_SIZE]
 
-        for c in range(16):
+        for c in range(BLOCK_SIZE):
             xor = convBytes(INT_BLOCK[c] ^ currentPTBlock[c])
             PREV_BLOCK += xor
 
@@ -41,13 +41,13 @@ def encrypt_helper(PREV_BLOCK) -> list:
     :return: Intermediate block
     """
 
-    i = 15  # position in block
+    i = BLOCK_SIZE - 1  # position in block
     padding = 1
     INT_BLOCK = []
 
     while i >= 0:
 
-        for value in range(256):
+        for value in range(HEX_VALUES):
             C_PRIME = (b'\x00' * i) + convBytes(value)
             if padding > 1:
 

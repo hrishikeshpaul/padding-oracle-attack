@@ -1,6 +1,8 @@
 import math
 
-from oracle import CT, convBytes, checkPadding
+from oracle import CT, convBytes, checkPadding, BLOCK_SIZE, HEX_VALUES
+
+
 
 
 def decrypt() -> None:
@@ -9,21 +11,20 @@ def decrypt() -> None:
     """
 
     block_num = 0
-    block_size = 16
     final_plain_text = ''
     NUM = 0
 
-    while block_num < math.ceil(len(CT) / block_size):
+    while block_num < math.ceil(len(CT) / BLOCK_SIZE):
         PT = ''
         if block_num == 0:
             C1 = '\x00' * 16
-            C2 = CT[block_num * block_size:(block_num + 1) * block_size]
+            C2 = CT[block_num * BLOCK_SIZE:(block_num + 1) * BLOCK_SIZE]
         else:
-            C1 = CT[(block_num - 1) * block_size:block_num * block_size]
-            C2 = CT[block_num * block_size:(block_num + 1) * block_size]
+            C1 = CT[(block_num - 1) * BLOCK_SIZE:block_num * BLOCK_SIZE]
+            C2 = CT[block_num * BLOCK_SIZE:(block_num + 1) * BLOCK_SIZE]
         padding = 1
 
-        i = block_size - 1
+        i = BLOCK_SIZE - 1
         while i >= 0:
             DC = decrypt_helper(C1, C2, padding, i, PT)
             PT += DC[0]
@@ -51,18 +52,18 @@ def decrypt_helper(C1, C2, padding, i, PT):
     """
 
     NUM = 0
-    for value in range(256):
+    for value in range(HEX_VALUES):
         NUM += 1
         C_PRIME = b'\x00' * i + convBytes(value)
 
         if padding > 1:
             p = padding - 1
             while p > 0:
-                C_PRIME += convBytes(padding ^ ord(PT[p - 1]) ^ ord(C1[16 - p: 16 - p + 1]))
+                C_PRIME += convBytes(padding ^ ord(PT[p - 1]) ^ ord(C1[BLOCK_SIZE - p: BLOCK_SIZE - p + 1]))
                 p -= 1
         msg = C_PRIME + C2
 
         if checkPadding(msg):
-            character = chr(padding ^ value ^ ord(C1[16 - padding: 16 - padding + 1]))
+            character = chr(padding ^ value ^ ord(C1[BLOCK_SIZE - padding: BLOCK_SIZE - padding + 1]))
             print('Found Character:', character, ord(character))
             return character, NUM
